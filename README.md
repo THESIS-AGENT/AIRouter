@@ -1,12 +1,25 @@
 # AIRouter
 
+<div align="center">
+
 [![Python](https://img.shields.io/badge/python-3.7+-blue.svg)](https://www.python.org/downloads/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Docker](https://img.shields.io/badge/docker-supported-blue.svg)](https://www.docker.com/)
+[![GitHub Stars](https://img.shields.io/github/stars/your-username/AIRouter.svg?style=social)](https://github.com/your-username/AIRouter)
+
+### 🌐 Language / 语言
+
+**[🇨🇳 中文版](#-中文版) | [🇺🇸 English Version](#-english-version)**
+
+---
+
+</div>
+
+## 🇨🇳 中文版
 
 一个智能的AI路由器，为大型语言模型(LLM)提供高性能的统一API接口，支持多源负载均衡和智能故障转移。
 
-## ✨ 主要特性
+### ✨ 主要特性
 
 - **🔄 统一API接口**: 通过统一的接口访问多种LLM提供商（OpenRouter、DeepInfra、DeerAPI、TogetherAI、Google、OpenAI、Anthropic等）
 - **⚡ 智能负载均衡**: 基于响应时间、成本和成功率的智能负载均衡与故障转移
@@ -17,7 +30,7 @@
 - **💰 成本优化**: 健康检查屏蔽功能，避免昂贵模型的不必要检查
 - **🐳 容器化部署**: 完整的Docker支持，开箱即用
 
-## 🏗️ 系统架构
+### 🏗️ 系统架构
 
 ```
 ┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
@@ -32,11 +45,11 @@
 └─────────────────┘    └──────────────────┘    └─────────────────┘
 ```
 
-## 📦 快速开始
+### 📦 快速开始
 
-### 安装
+#### 安装
 
-#### 方式一：作为Python包安装（推荐）
+**方式一：作为Python包安装（推荐）**
 
 ```bash
 git clone https://github.com/your-username/AIRouter.git
@@ -44,7 +57,7 @@ cd AIRouter
 pip install -e .
 ```
 
-#### 方式二：直接安装依赖
+**方式二：直接安装依赖**
 
 ```bash
 git clone https://github.com/your-username/AIRouter.git
@@ -52,16 +65,16 @@ cd AIRouter
 pip install -r requirements.txt
 ```
 
-### 配置
+#### 配置
 
-1. **配置API密钥**: 复制并编辑API密钥配置文件
+**1. 配置API密钥**
 
 ```bash
-cp ew_config/api_keys.py ew_config/api_keys_local.py
+cp ew_config/api_keys.example.py ew_config/api_keys_local.py
 # 编辑 ew_config/api_keys_local.py，填入您的真实API密钥
 ```
 
-2. **数据库设置**: 配置MySQL数据库用于API密钥管理
+**2. 数据库设置**
 
 ```sql
 CREATE DATABASE airouter;
@@ -79,7 +92,7 @@ CREATE TABLE api_key_usage (
 );
 ```
 
-3. **环境变量**: 配置数据库连接
+**3. 环境变量**
 
 ```bash
 # 复制环境变量配置文件
@@ -89,24 +102,11 @@ cp env.example .env
 # 注意：请确保设置 DB_PASSWORD，这是必需的环境变量
 ```
 
-或者直接设置环境变量：
+#### 启动服务
+
+**Docker部署（推荐）**
 
 ```bash
-export DB_HOST=localhost
-export DB_USER=root
-export DB_PASSWORD=your_password_here  # 必须设置
-export DB_NAME=airouter
-export DB_PORT=3306
-```
-
-### 启动服务
-
-#### Docker部署（推荐）
-
-```bash
-# 创建Docker网络
-docker network create airouter-network
-
 # 启动服务
 docker-compose up -d
 
@@ -114,7 +114,7 @@ docker-compose up -d
 docker-compose ps
 ```
 
-#### 手动启动
+**手动启动**
 
 ```bash
 # 启动健康检查服务
@@ -124,9 +124,9 @@ python CheckHealthy.py
 python -m api_key_manager.main
 ```
 
-## 🚀 使用示例
+### 🚀 使用示例
 
-### 基本文本生成
+#### 基本文本生成
 
 ```python
 from LLMwrapper import LLM_Wrapper
@@ -139,7 +139,7 @@ response = LLM_Wrapper.generate(
 print(response)
 ```
 
-### 多模态输入
+#### 多模态输入
 
 ```python
 import base64
@@ -156,7 +156,7 @@ response = LLM_Wrapper.generate_mm(
 print(response)
 ```
 
-### 函数调用
+#### 函数调用
 
 ```python
 tools = [
@@ -184,18 +184,9 @@ response = LLM_Wrapper.function_calling(
 print(response)
 ```
 
-## 📊 性能监控
+### 🔧 高级配置
 
-AIRouter提供了完整的性能监控功能：
-
-- **实时健康检查**: 监控所有API端点的可用性
-- **性能统计**: 响应时间、成功率、成本分析
-- **智能路由**: 基于性能指标的动态路由选择
-- **故障转移**: 自动检测和切换故障节点
-
-## 🔧 高级配置
-
-### 负载均衡策略
+#### 负载均衡策略
 
 ```python
 # 配置负载均衡模式
@@ -206,18 +197,7 @@ response = LLM_Wrapper.generate(
 )
 ```
 
-### 超时设置
-
-```python
-# 自定义超时时间
-response = LLM_Wrapper.generate(
-    model_name="gpt4o_mini",
-    prompt="长文本处理任务",
-    timeout=60  # 60秒超时
-)
-```
-
-### 帕累托最优选择
+#### 帕累托最优选择
 
 ```python
 # 从多个模型中选择最优结果
@@ -227,104 +207,15 @@ response = LLM_Wrapper.generate_fromTHEbest(
 )
 ```
 
-## 🛠️ 开发指南
-
-### 项目结构
-
-```
-AIRouter/
-├── LLMwrapper.py          # 核心API接口
-├── LoadBalancing.py       # 负载均衡逻辑
-├── CheckHealthy.py        # 健康检查服务
-├── api_key_manager/       # API密钥管理服务
-├── ew_config/            # 配置文件
-├── ew_api/               # API基础设施
-├── ew_decorator/         # 装饰器工具
-└── unit_test/            # 测试套件
-```
-
-### 添加新的LLM提供商
-
-1. 在 `ew_config/source.py` 中添加新的提供商配置
-2. 在 `ew_config/api_keys.py` 中配置API密钥
-3. 在 `ew_api/` 中实现新的API接口
-4. 更新 `LoadBalancing.py` 中的路由逻辑
-
-### 运行测试
-
-```bash
-# 运行基础测试
-python unit_test.py
-
-# 运行完整测试套件
-python unit_test/run_all_tests.py
-
-# 运行API密钥管理测试
-python -m api_key_manager.unit_test
-```
-
-## 🐳 Docker 部署
-
-### 构建镜像
-
-```bash
-docker build -t airouter:latest .
-```
-
-### 环境变量配置
-
-创建 `.env` 文件：
-
-```env
-DB_HOST=host.docker.internal
-DB_USER=root
-DB_PASSWORD=your_password
-DB_NAME=airouter
-DB_PORT=3306
-```
-
-### 启动服务
-
-```bash
-docker-compose up -d
-```
-
-## 📈 监控和日志
-
-### 健康检查端点
-
-- **健康检查服务**: `http://localhost:8001/check_healthy`
-- **API密钥管理服务**: `http://localhost:8002/check_healthy`
-- **Docker健康检查**: `http://localhost:8001/docker-health`
-
-### 日志查看
-
-```bash
-# 查看服务日志
-docker-compose logs -f airouter-health-check
-docker-compose logs -f airouter-key-manager
-
-# 查看实时日志
-tail -f health_check.log
-```
-
-## 🤝 贡献指南
+### 🤝 贡献指南
 
 我们欢迎所有形式的贡献！请查看 [CONTRIBUTING.md](CONTRIBUTING.md) 了解详细信息。
 
-### 快速开始贡献
-
-1. Fork 这个仓库
-2. 创建您的特性分支 (`git checkout -b feature/AmazingFeature`)
-3. 提交您的更改 (`git commit -m 'Add some AmazingFeature'`)
-4. 推送到分支 (`git push origin feature/AmazingFeature`)
-5. 打开一个 Pull Request
-
-## 📄 许可证
+### 📄 许可证
 
 这个项目使用 MIT 许可证 - 查看 [LICENSE](LICENSE) 文件了解详细信息。
 
-## 🆘 支持
+### 🆘 支持
 
 如果您在使用过程中遇到问题，请：
 
@@ -332,19 +223,326 @@ tail -f health_check.log
 2. 创建新的 Issue 描述您的问题
 3. 加入我们的讨论 [GitHub Discussions](https://github.com/your-username/AIRouter/discussions)
 
-## 🚀 路线图
+---
 
-- [ ] 支持更多LLM提供商
-- [ ] 增强的监控仪表板
-- [ ] 自动扩缩容功能
-- [ ] 更多的负载均衡策略
-- [ ] 插件系统
-- [ ] Web UI界面
+## 🇺🇸 English Version
 
-## 🙏 致谢
+An intelligent AI router that provides high-performance unified API interfaces for Large Language Models (LLMs), supporting multi-source load balancing and intelligent failover.
 
-感谢所有为这个项目做出贡献的开发者们！
+### ✨ Key Features
+
+- **🔄 Unified API Interface**: Access multiple LLM providers through a single interface (OpenRouter, DeepInfra, DeerAPI, TogetherAI, Google, OpenAI, Anthropic, etc.)
+- **⚡ Smart Load Balancing**: Intelligent load balancing and failover based on response time, cost, and success rate
+- **📊 Real-time Health Monitoring**: Automatic monitoring of API health status and performance metrics
+- **🔑 High-performance API Key Management**: 100x performance improvement in API key management with intelligent failure avoidance
+- **🎯 Multimodal Support**: Support for text generation, multimodal input (image + text), and function calling
+- **🚀 Pareto Optimal Selection**: Intelligently select the optimal model from multiple options
+- **💰 Cost Optimization**: Health check blacklist feature to avoid unnecessary checks on expensive models
+- **🐳 Containerized Deployment**: Complete Docker support, ready to use out of the box
+
+### 🏗️ System Architecture
+
+```
+┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
+│   AIRouter      │    │  LoadBalancing   │    │ Health Monitor  │
+│   (Core API)    │◄──►│ (Smart Routing)  │◄──►│ (Health Check)  │
+└─────────────────┘    └──────────────────┘    └─────────────────┘
+         │                        │                        │
+         ▼                        ▼                        ▼
+┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
+│ Multiple LLM    │    │  API Key Manager │    │   Performance   │
+│ Providers       │    │    (Service)     │    │   Analytics     │
+└─────────────────┘    └──────────────────┘    └─────────────────┘
+```
+
+### 📦 Quick Start
+
+#### Installation
+
+**Method 1: Install as Python Package (Recommended)**
+
+```bash
+git clone https://github.com/your-username/AIRouter.git
+cd AIRouter
+pip install -e .
+```
+
+**Method 2: Install Dependencies Directly**
+
+```bash
+git clone https://github.com/your-username/AIRouter.git
+cd AIRouter  
+pip install -r requirements.txt
+```
+
+#### Configuration
+
+**1. Configure API Keys**
+
+```bash
+cp ew_config/api_keys.example.py ew_config/api_keys_local.py
+# Edit ew_config/api_keys_local.py and fill in your real API keys
+```
+
+**2. Database Setup**
+
+```sql
+CREATE DATABASE airouter;
+CREATE TABLE api_key_usage (
+    request_id VARCHAR(50) PRIMARY KEY,
+    api_key VARCHAR(100) NOT NULL,
+    model_name VARCHAR(50) NOT NULL,
+    source_name VARCHAR(50) NOT NULL,
+    prompt_tokens INT,
+    completion_tokens INT,
+    create_time DATETIME NOT NULL,
+    finish_time DATETIME NOT NULL,
+    execution_time FLOAT NOT NULL,
+    status BOOLEAN NOT NULL
+);
+```
+
+**3. Environment Variables**
+
+```bash
+# Copy environment variable configuration file
+cp env.example .env
+
+# Edit .env file and fill in your real database information
+# Note: Make sure to set DB_PASSWORD, this is a required environment variable
+```
+
+#### Start Services
+
+**Docker Deployment (Recommended)**
+
+```bash
+# Start services
+docker-compose up -d
+
+# Check service status
+docker-compose ps
+```
+
+**Manual Start**
+
+```bash
+# Start health check service
+python CheckHealthy.py
+
+# Start API key manager service in another terminal
+python -m api_key_manager.main
+```
+
+### 🚀 Usage Examples
+
+#### Basic Text Generation
+
+```python
+from LLMwrapper import LLM_Wrapper
+
+# Simple text generation
+response = LLM_Wrapper.generate(
+    model_name="gpt4o_mini",
+    prompt="Explain the basic principles of quantum computing"
+)
+print(response)
+```
+
+#### Multimodal Input
+
+```python
+import base64
+
+# Image + text input
+with open("image.jpg", "rb") as f:
+    img_base64 = base64.b64encode(f.read()).decode()
+
+response = LLM_Wrapper.generate_mm(
+    model_name="gpt4o_mini",
+    prompt="Describe the content of this image",
+    img_base64=img_base64
+)
+print(response)
+```
+
+#### Function Calling
+
+```python
+tools = [
+    {
+        "type": "function",
+        "function": {
+            "name": "get_weather",
+            "description": "Get weather information",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "location": {"type": "string", "description": "City name"}
+                },
+                "required": ["location"]
+            }
+        }
+    }
+]
+
+response = LLM_Wrapper.function_calling(
+    model_name="gpt4o_mini",
+    prompt="What's the weather like in Beijing today?",
+    tools=tools
+)
+print(response)
+```
+
+### 🔧 Advanced Configuration
+
+#### Load Balancing Strategies
+
+```python
+# Configure load balancing mode
+response = LLM_Wrapper.generate(
+    model_name="gpt4o_mini",
+    prompt="Hello",
+    mode="cost_first"  # Options: fast_first, cost_first, balanced
+)
+```
+
+#### Pareto Optimal Selection
+
+```python
+# Select optimal results from multiple models
+response = LLM_Wrapper.generate_fromTHEbest(
+    model_list=["gpt4o_mini", "claude35_sonnet", "gemini15_pro"],
+    prompt="Complex reasoning task"
+)
+```
+
+### 🛠️ Development Guide
+
+#### Project Structure
+
+```
+AIRouter/
+├── LLMwrapper.py          # Core API interface
+├── LoadBalancing.py       # Load balancing logic
+├── CheckHealthy.py        # Health check service
+├── api_key_manager/       # API key management service
+├── ew_config/            # Configuration files
+├── ew_api/               # API infrastructure
+├── ew_decorator/         # Decorator utilities
+└── unit_test/            # Test suite
+```
+
+#### Adding New LLM Providers
+
+1. Add new provider configuration in `ew_config/source.py`
+2. Configure API keys in `ew_config/api_keys.py`
+3. Implement new API interface in `ew_api/`
+4. Update routing logic in `LoadBalancing.py`
+
+#### Running Tests
+
+```bash
+# Run basic tests
+python unit_test.py
+
+# Run complete test suite
+python unit_test/run_all_tests.py
+
+# Run API key manager tests
+python -m api_key_manager.unit_test
+```
+
+### 🐳 Docker Deployment
+
+#### Build Image
+
+```bash
+docker build -t airouter:latest .
+```
+
+#### Environment Configuration
+
+Create `.env` file:
+
+```env
+DB_HOST=host.docker.internal
+DB_USER=root
+DB_PASSWORD=your_password_here
+DB_NAME=airouter
+DB_PORT=3306
+```
+
+#### Start Services
+
+```bash
+docker-compose up -d
+```
+
+### 📈 Monitoring and Logging
+
+#### Health Check Endpoints
+
+- **Health Check Service**: `http://localhost:8001/check_healthy`
+- **API Key Manager Service**: `http://localhost:8002/check_healthy`
+- **Docker Health Check**: `http://localhost:8001/docker-health`
+
+#### View Logs
+
+```bash
+# View service logs
+docker-compose logs -f airouter-health-check
+docker-compose logs -f airouter-key-manager
+
+# View real-time logs
+tail -f health_check.log
+```
+
+### 🤝 Contributing
+
+We welcome all forms of contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for detailed information.
+
+#### Quick Start Contributing
+
+1. Fork this repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+### 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+### 🆘 Support
+
+If you encounter any issues during use, please:
+
+1. Check [GitHub Issues](https://github.com/your-username/AIRouter/issues)
+2. Create a new Issue describing your problem
+3. Join our discussion at [GitHub Discussions](https://github.com/your-username/AIRouter/discussions)
+
+### 🚀 Roadmap
+
+- [ ] Support for more LLM providers
+- [ ] Enhanced monitoring dashboard
+- [ ] Auto-scaling capabilities
+- [ ] More load balancing strategies
+- [ ] Plugin system
+- [ ] Web UI interface
+
+### 🙏 Acknowledgments
+
+Thanks to all developers who contributed to this project!
 
 ---
 
-⭐ 如果这个项目对您有帮助，请给我们一个 Star！
+<div align="center">
+
+⭐ **If this project helps you, please give us a Star!**
+
+⭐ **如果这个项目对您有帮助，请给我们一个 Star！**
+
+**[🔝 Back to Top](#airouter)**
+
+</div>
