@@ -1,0 +1,79 @@
+services:
+  api-health-check:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: api-health-check
+    ports:
+      - "8001:8000"
+    environment:
+      - MAX_WINDOW_SIZE=100
+      - CHECK_TIMER_SPAN=30
+      - API_KEY_MANAGER_URL=http://api-key-manager:8000
+      - HEALTH_CHECK_TIMEOUT=30
+      - HEALTH_CHECK_TIMEOUT_MM=60
+      - INNER_TIMEOUT=5
+      - FAILED_KEY_CHECK_INTERVAL=1
+    volumes:
+      - /data/docker_logs/:/app/logs
+    command: bash -c "mkdir -p /app/logs && uvicorn CheckHealthy:app --host 0.0.0.0 --port 8000 --log-level info 2>&1 | tee /app/logs/api-health-check.log"
+    restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/docker-health"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+      start_period: 120s
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2G
+    logging:
+      driver: json-file
+      options:
+        max-size: "100m"
+        max-file: "3"
+        compress: "true"
+  api-key-manager:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: api-key-manager
+    ports:
+      - "8002:8000"
+    environment:
+      - DB_HOST=model-db.c7w2c82gq3tj.ap-southeast-2.rds.amazonaws.com
+      - DB_USER=${DB_USER:-admin}
+      - DB_PASSWORD=${DB_PASSWORD:-mdwbh75.}
+      - DB_NAME=${DB_NAME:-thesis_model}
+      - DB_PORT=${DB_PORT:-3306}
+      - TOLERANCE_TIMES=4
+      - HEALTH_CHECK_TIMEOUT=5
+      - API_HEALTH_CHECK_URL=http://api-health-check:8000/check_healthy
+      - API_KEY_MANAGER_URL=http://api-key-manager:8000
+      - API_KEY_MANAGER_GET_ENDPOINT=/get_apikey
+      - API_KEY_MANAGER_NOTICE_ENDPOINT=/notice_apikey
+    volumes:
+      - /data/docker_logs/:/app/logs
+    command: bash -c "mkdir -p /app/logs && python -m api_key_manager.main 2>&1 | tee /app/logs/api-key-manager.log"
+    restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/check_healthy"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2G
+    depends_on:
+      - api-health-check
+    logging:
+      driver: json-file
+      options:
+        max-size: "100m"
+        max-file: "3"
+        compress: "true"
