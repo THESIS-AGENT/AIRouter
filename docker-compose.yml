@@ -1,0 +1,65 @@
+services:
+  airouter-health-check:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: airouter-health-check
+    ports:
+      - "8001:8000"
+    environment:
+      - MAX_WINDOW_SIZE=100
+      - CHECK_TIMER_SPAN=1000
+      - API_KEY_MANAGER_URL=http://airouter-key-manager:8000
+      - HEALTH_CHECK_TIMEOUT=30
+      - HEALTH_CHECK_TIMEOUT_MM=60
+      - INNER_TIMEOUT=5
+      - FAILED_KEY_CHECK_INTERVAL=1
+    volumes:
+      - ./:/app
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/docker-health"]  
+      interval: 60s
+      timeout: 10s
+      retries: 3
+      start_period: 120s  # Give the service some time for initial health check to complete
+    networks:
+      - airouter-network
+      
+  airouter-key-manager:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: airouter-key-manager
+    ports:
+      - "8002:8000"
+    environment:
+      - DB_HOST=${DB_HOST:-host.docker.internal}
+      - DB_USER=${DB_USER:-root}
+      - DB_PASSWORD=${DB_PASSWORD:?请设置数据库密码环境变量}
+      - DB_NAME=${DB_NAME:-airouter}
+      - DB_PORT=${DB_PORT:-3306}
+      - TOLERANCE_TIMES=4
+      - HEALTH_CHECK_TIMEOUT=1
+      - API_HEALTH_CHECK_URL=http://airouter-health-check:8000/check_healthy
+      - API_KEY_MANAGER_URL=http://airouter-key-manager:8000
+      - API_KEY_MANAGER_GET_ENDPOINT=/get_apikey
+      - API_KEY_MANAGER_NOTICE_ENDPOINT=/notice_apikey
+    volumes:
+      - ./:/app
+    command: python -m api_key_manager.main
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/check_healthy"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    depends_on:
+      - airouter-health-check
+    networks:
+      - airouter-network
+
+networks:
+  airouter-network:
+    driver: bridge
