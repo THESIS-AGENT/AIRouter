@@ -1,0 +1,90 @@
+# 敏感配置文件
+*.env
+*.env.local
+*.env.production
+*.env.development
+docker-compose-online.yml
+docker-compose.prod.yml
+docker-compose.production.yml
+
+# API密钥和配置
+**/api_keys.py
+**/api_keys.json
+**/config/keys.py
+**/config/secrets.py
+**/secrets.json
+**/secrets.yaml
+
+# 数据库配置
+**/database.yml
+**/database.json
+**/db_config.py
+
+# 日志文件
+*.log
+logs/
+*.log.*
+
+# 临时文件
+*.tmp
+*.temp
+.DS_Store
+Thumbs.db
+
+# Python相关
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# IDE文件
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 虚拟环境
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# 测试结果
+.coverage
+.pytest_cache/
+htmlcov/
+.tox/
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# 系统文件
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
