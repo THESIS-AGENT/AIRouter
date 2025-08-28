@@ -5,7 +5,7 @@
 [![Python](https://img.shields.io/badge/python-3.7+-blue.svg)](https://www.python.org/downloads/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Docker](https://img.shields.io/badge/docker-supported-blue.svg)](https://www.docker.com/)
-[![GitHub Stars](https://img.shields.io/github/stars/your-username/AIRouter.svg?style=social)](https://github.com/your-username/AIRouter)
+[![GitHub Stars](https://img.shields.io/github/stars/your-username/AIRouter.svg?style=social)](https://github.com/THESIS-AGENT/AIRouter)
 
 ### 🌐 Language / 语言
 
